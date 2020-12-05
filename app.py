@@ -69,17 +69,17 @@ def stats(start, end):
 
 #calculate TMIN, TAVG, and TMAX for all dates greater than and equal to the start date.
 
-    results_temps = session.query(*sel).\
+        results_temps = session.query(*sel).\
             filter(Measurement.date >= start).all()
-            return jsonify(results_temps)
+        return jsonify(results_temps)
 
 # calculate the TMIN, TAVG, and TMAX for dates between the start and end date inclusive.
 
-    results_end = session.query(*sel).\
-    filter(Measurement.date >= start).\
-    filter(Measurement.date <= end).all()
+    results_end = session.query(*sel).filter(Measurement.date >= start).filter(Measurement.date <= end).all()
     
     return jsonify(results_end)
 
 if __name__ == '__main__': 
     app.run(debug=True)
+
+    session.close()
