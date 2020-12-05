@@ -63,14 +63,23 @@ def most_active_station():
 @app.route("/api/v1.0/<start>/<end>")
 def stats(start, end):
 # Return a JSON list of the min, avg  and the max temp for a given start or start-end range.
+sel = [func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)]
 
+    if not end:
 
 #calculate TMIN, TAVG, and TMAX for all dates greater than and equal to the start date.
 
+results_temps = session.query(*sel).\
+            filter(Measurement.date >= start).all()
+            return jsonify(results_temps)
 
 # calculate the TMIN, TAVG, and TMAX for dates between the start and end date inclusive.
 
-
+results_end = session.query(*sel).\
+    filter(Measurement.date >= start).\
+    filter(Measurement.date <= end).all()
+    
+    return jsonify(results_end)
 
 if __name__ == '__main__': 
     app.run(debug=True)
