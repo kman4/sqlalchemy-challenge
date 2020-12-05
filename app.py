@@ -44,17 +44,33 @@ def precipitation():
 @app.route("/api/v1.0/stations")
 def stations(): 
 # Design a query to show how many stations are available in this dataset?
-    session.query(Measurement.station).group_by(Measurement.station).count()
-
-    return jsonify(stations)
+   Nu_station = session.query(Station.station).count()
+   return jsonify(Nu_stations)
 
 
 @app.route("/api/v1.0/tobs")
-def precipitation(): 
-    oneyr_ago = dt.date(2017, 8, 23) - dt.timedelta(days=365)
-    one_year = session.query(Measurement.date,Measurement.prcp).filter(Measurement.date >= oneyr_ago).order_by(Measurement.date).all()
-    results = {date:prcp for date,prcp in one_year}
-    return jsonify(results)
+# Return a JSON list of temperature observations (TOBS) for the previous year.
+def most_active_station(): 
+    prev_year = dt.date(2017, 8, 23) - dt.timedelta(days=365)
+
+    temp_results = session.query(Measurement.tobs).\
+    filter(Measurement.station == 'USC00519281').\
+    filter(Measurement.date >= prev_year).all()
+
+    return jsonify(temp_results)
+
+@app.route("/api/v1.0/<start>")
+@app.route("/api/v1.0/<start>/<end>")
+def stats(start, end):
+# Return a JSON list of the min, avg  and the max temp for a given start or start-end range.
+
+
+#calculate TMIN, TAVG, and TMAX for all dates greater than and equal to the start date.
+
+
+# calculate the TMIN, TAVG, and TMAX for dates between the start and end date inclusive.
+
+
 
 if __name__ == '__main__': 
     app.run(debug=True)
